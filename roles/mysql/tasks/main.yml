@@ -1,0 +1,8 @@
+---
+# tasks file for containers
+- include: images.yml
+- include: docker-network.yml
+- include: mysql-conf.yml
+- include: container.yml
+- include: replication.yml
+  when: servers|int > 1

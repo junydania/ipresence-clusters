@@ -1,0 +1,47 @@
+
+---
+- name: Create container for rabbitmq1
+  docker_container:
+    name: rabbitmq1
+    image: bijukunjummen/rabbitmq-server:3.7.0
+    state: started
+    hostname: rabbitmq1
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    env:
+      RABBITMQ_DEFAULT_USER: "{{ rabbitmq_user }}"
+      RABBITMQ_DEFAULT_PASS: "{{ rabbitmq_pass }}"
+
+- name: Create container for rabbitmq2
+  docker_container:
+    name: rabbitmq2
+    image: bijukunjummen/rabbitmq-server:3.7.0
+    state: started
+    hostname: rabbitmq2
+    ports:
+      - "5673:5672"
+      - "15673:15672"
+    links:
+      - rabbitmq1
+    env:
+      CLUSTERED: "true"
+      CLUSTER_WITH: "rabbitmq1"
+      RAM_NODE: "true"
+
+
+- name: Create container for rabbitmq3
+  docker_container:
+    name: rabbitmq3
+    image: bijukunjummen/rabbitmq-server:3.7.0
+    state: started
+    hostname: rabbitmq3
+    ports:
+      - "5674:5672"
+    links:
+      - rabbitmq1
+      - rabbitmq2
+    env:
+      CLUSTERED: "true"
+      CLUSTER_WITH: "rabbitmq1"
+      RAM_NODE: "true"

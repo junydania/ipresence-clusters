@@ -1,0 +1,16 @@
+---
+- name: Create volume for redis-cluster_data-0
+  docker_volume:
+    name: redis-cluster_data-0
+
+- name: Create volume for redis-cluster_data-1
+  docker_volume:
+    name: redis-cluster_data-1
+
+- name: Create volume for redis-cluster_data-2
+  docker_volume:
+    name: redis-cluster_data-2
+
+- name: Create volume for redis-cluster_data-3
+  docker_volume:
+    name: redis-cluster_data-3

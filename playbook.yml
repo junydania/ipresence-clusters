@@ -1,0 +1,25 @@
+
+- hosts: all
+  remote_user: root
+  tasks:
+  - name: Install pip dependencies
+    yum: name=epel-release state=present
+  - name: Install pip
+    yum: name=python-pip state=present
+  - name: install docker-py
+    pip:
+      name: ['docker-py', 'pyyaml']
+
+
+- name: Setup docker, MySQL redis and RabbitMQ
+  hosts: all
+  remote_user: root
+  become: yes
+  roles:
+    - role: naftulikay.vagrant-docker
+    - role: rabbitmq
+      rabbitmq_user: "mqadmin"
+      rabbitmq_pass: "pass12345"
+    - role: redis
+    - role: mysql
+      servers: 3

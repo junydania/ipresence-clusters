@@ -1,0 +1,74 @@
+
+---
+- name: Create container for redis-node-0
+  docker_container:
+    name: redis-node-0
+    image: docker.io/bitnami/redis-cluster:6.0-debian-10
+    state: started
+    hostname: redis-node-0
+    volumes:
+      - redis-cluster_data-0:/bitnami/redis/data
+    networks:
+      - name: "{{ docker_network_name }}"
+    env:
+      REDIS_PASSWORD: "bitnami"
+      REDIS_NODES: "redis-node-0 redis-node-1 redis-node-2 redis-node-3"
+
+
+- name: Create container for redis-node-1
+  docker_container:
+    name: redis-node-1
+    image: docker.io/bitnami/redis-cluster:6.0-debian-10
+    state: started
+    hostname: redis-node-1
+    volumes:
+      - redis-cluster_data-1:/bitnami/redis/data
+    networks:
+      - name: "{{ docker_network_name }}"
+    env:
+      REDIS_PASSWORD: "bitnami"
+      REDIS_NODES: "redis-node-0 redis-node-1 redis-node-2 redis-node-3"
+
+
+- name: Create container for redis-node-2
+  docker_container:
+    name: redis-node-2
+    image: docker.io/bitnami/redis-cluster:6.0-debian-10
+    state: started
+    hostname: redis-node-2
+    volumes:
+      - redis-cluster_data-2:/bitnami/redis/data
+    networks:
+      - name: "{{ docker_network_name }}"
+    env:
+      REDIS_PASSWORD: "bitnami"
+      REDIS_NODES: "redis-node-0 redis-node-1 redis-node-2 redis-node-3"
+
+
+- name: Create container for redis-node-3
+  docker_container:
+    name: redis-node-3
+    image: docker.io/bitnami/redis-cluster:6.0-debian-10
+    state: started
+    hostname: redis-node-3
+    volumes:
+      - redis-cluster_data-3:/bitnami/redis/data
+    networks:
+      - name: "{{ docker_network_name }}"
+    env:
+      REDIS_PASSWORD: "bitnami"
+      REDIS_NODES: "redis-node-0 redis-node-1 redis-node-2 redis-node-3"
+
+
+- name: redis-cluster-init
+  docker_container:
+    name: redis-node-3
+    image: docker.io/bitnami/redis-cluster:6.0-debian-10
+    state: started
+    networks:
+      - name: "{{ docker_network_name }}"
+    env:
+      REDISCLI_AUTH: bitnami
+      REDIS_CLUSTER_REPLICAS: "1"
+      REDIS_NODES: "redis-node-0 redis-node-1 redis-node-2 redis-node-3"
+      REDIS_CLUSTER_CREATOR: "yes"
